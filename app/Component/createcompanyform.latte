@@ -1,0 +1,19 @@
+{* Latte template *}
+
+{block content}
+{control createCompanyForm}
+ <script src="{$basePath}/js/jquery-3.6.0.min.js"></script>
+
+        <script>
+            function ares(){
+                            ico = document.getElementById("ico").value;
+                            alert(ico);
+                            $.ajax({
+                                    method: 'get',
+                                    url: {link ares!},
+                                    data: { ico: ico }
+                            });
+
+            };
+        </script>      
+  
