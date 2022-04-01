@@ -1,19 +1,26 @@
 {* Latte template *}
 
 {block content}
+{snippet form}
 {control createCompanyForm}
+{/snippet}
  <script src="{$basePath}/js/jquery-3.6.0.min.js"></script>
 
-        <script>
-            function ares(){
-                            ico = document.getElementById("ico").value;
-                            alert(ico);
-                            $.ajax({
-                                    method: 'get',
-                                    url: {link ares!},
-                                    data: { ico: ico }
-                            });
+<script>
+	function ares(){
+		let ico = document.getElementById("ico").value;
+		let link = {link ares! ico => '__placeholder__'};
+		let url = link.replace('__placeholder__', ico);
 
-            };
-        </script>      
-  
+		console.log({
+			ico: ico,
+			link: link,
+			url: url
+		});
+
+		$.ajax({
+			method: 'get',
+			url: url
+		});
+	};
+</script>
