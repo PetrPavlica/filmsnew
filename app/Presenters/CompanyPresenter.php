@@ -31,7 +31,7 @@ final class CompanyPresenter extends Nette\Application\UI\Presenter
                                   $company_adress=null,
                                   $company_person_name=null,
                                   $company_person_email=null
-                                 ) 
+                                 ): void
     {
         $this->template->ico = $ico;
         $this->template->dic = $dic;

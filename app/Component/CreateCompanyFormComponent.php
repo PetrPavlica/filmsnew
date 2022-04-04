@@ -83,7 +83,7 @@ final class CreateCompanyFormComponent extends Nette\Application\UI\Control
         
     }
     
-    public function createComponentCreateCompanyForm() 
+    public function createComponentCreateCompanyForm(): Form
 
     {
         $form = new Form();
@@ -119,13 +119,13 @@ final class CreateCompanyFormComponent extends Nette\Application\UI\Control
         return $form;
     }
     
-    public function processForm($form)
+    public function processForm($form): void
     {
         $data = $form->getValues(true);
         $this->onCreateCompanyFormSave($data);
     }
     
-    public function render()
+    public function render(): void
     {
         $this->template->render(__DIR__ . '/createcompanyform.latte');
     }
