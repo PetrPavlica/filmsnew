@@ -22,5 +22,20 @@
 			method: 'get',
 			url: url
 		});
+                $.ajax({
+                     method: 'get',
+                     url: url
+                     }).done(function(data) {
+                        console.log(data); // data.dic, data.company_name
+                        if(data['ares'] === 1){
+                            document.getElementById("dic").value = data['dic'];
+                            document.getElementById("company_name").value = data['company_name'];
+                            document.getElementById("company_adress").value = data['company_adress'];
+                        }
+                        else{
+                            alert(data['ares']);
+                        }
+                      });
 	};
+        
 </script>
