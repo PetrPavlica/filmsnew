@@ -3,8 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5/dist/slate/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0/css/all.min.css">
+        <title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
 </head>
 
 <body>
@@ -13,7 +15,45 @@
 	{include content}
 
 	{block scripts}
-        
-	{/block}
+            <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/js/bootstrap.bundle.min.js"></script>
+           <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/4.0.11/jquery.uploadfile.min.js" integrity="sha512-uwNlWrX8+f31dKuSezJIHdwlROJWNkP6URRf+FSWkxSgrGRuiAreWzJLA2IpyRH9lN2H67IP5H4CxBcAshYGNw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script>
+            $( function() {
+              $( "#sortable" ).sortable();
+            } );
+          </script>
+          <script>
+            $( function() {
+              $( "#droppable" ).droppable({
+                drop: function( event, ui ) {
+                  $( this )
+                    .addClass( "ui-state-highlight" )
+                    .find( "p" )
+                      .html( "Dropped!" );
+                }
+              });
+            } );
+           </script>
+           <script>
+                function uploadimage(){
+                        let link = {link uploadimage!};
+                        let data = new FormData($('#formWithFiles')[0]);
+                        alert(data);
+                        $.ajax({
+                                type: 'GET',
+                                url: link,
+                                enctype: 'multipart/form-data',
+                                data: data,
+                                processData: false,
+                                contentType: false
+                                
+                        });
+                        
+                };
+
+            </script>
+        {/block}
 </body>
 </html>
