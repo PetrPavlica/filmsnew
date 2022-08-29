@@ -1,26 +1,37 @@
 {* Latte template *}
 
 {block content}
-  <style>
-  #sortable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
-  #sortable li { padding: 1px; float: left; width: 300px; height: 90px; font-size: 4em; text-align: center; }
-  #droppable { width: 100%; height: 150px;background-color: white; }
-  h4 { font-size:0.3em; }
-  p { font-size:0.2em; }
-  </style>
+  
 <ul id="sortable">
   <li class="ui-state-default">
    <form n:name="storyBoardForm" class='form style-form' id="storyboard">   
     <div class="card" style="width:350px">
-        <h4 class="card-title">01</h4>   
-        <input id="hours" type="number" n:name="hours" onchange="updatetime()" id="hours"> 
-        <input id="minutes" type="number" n:name="minutes" onchange="updatetime()" id="minutes">
-        <input id="seconds" type="number" n:name="seconds" onchange="updatetime()" id="seconds">   
+       <div class="row" style='margin-top:5px;'>
+                <div class="col-2">
+                    <h4 class="card-title">01</h4>  
+                </div>
+                <div class="col-3">
+                    <h4 class="card-title">TC: 00:01,0</h4>  
+                </div> 
+                <div class="col-4">
+                     <h4 class="card-title"><label>Délka: </label><input id="minutes" type="number" n:name="minutes" onchange="updatetime();" id="minutes" style="width:60px;height:20px;"></h4> 
+                </div>    
+                <div class="col-3" style='text-align:left;'>   
+                    <h4 class="card-title"><label> : </label><input id="seconds" type="number" n:name="seconds" onchange="updatetime();" id="seconds" style="width:62px;height:20px;"></h4> 
+                </div>
+        </div>
+            
+             <div class="row" style='margin-top:5px;'>
+                 <div id="droppable" class="ui-widget-header">
+                     <p>Drop here</p>
+                 </div>
+             </div>
+   
         <div class="card-body">
             <p class="card-text">Some example text.</p>
-            <a href="#" class="btn btn-primary">See Profile</a>
-        </div>
-    </div>
+        </div>    
+      </div>  
+    
     </form>   
   </li>
 </ul>

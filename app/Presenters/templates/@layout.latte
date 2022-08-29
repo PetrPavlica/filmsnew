@@ -10,9 +10,16 @@
 </head>
 
 <body>
+        <style>
+            #sortable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
+            #sortable li { padding: 1px; float: left; width: 300px; height: 90px; font-size: 4em; text-align: center; }
+            #droppable { width: 91%; height: 150px;background-color: white; margin-left: 15px;}
+            h4 { font-size:0.22em; color:white;}
+            p { font-size:0.2em; }
+        </style>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-
-	{include content}
+        
+            {include content}
 
 	{block scripts}
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -49,6 +56,22 @@
                                 processData: false,
                                 contentType: false
                                 
+                        });
+                        
+                };
+
+            </script>
+             <script>
+                function updatetime(){
+                        let link = {link updatetime!};
+                        let hours = document.getElementById("hours").value;
+                        let minutes = document.getElementById("minutes").value;
+                        let seconds = document.getElementById("seconds").value;
+                        let seconds = document.getElementById("seconds").value;
+                        $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { hours: hours, minutes: minutes, seconds: seconds }
                         });
                         
                 };

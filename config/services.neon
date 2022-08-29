@@ -1,3 +1,5 @@
 services:
 	- App\Router\RouterFactory::createRouter
 	- IStoryBoardComponent
+	- IStoryBoardFormComponent
+	- App\Model\FilmsModel

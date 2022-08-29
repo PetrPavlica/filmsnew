@@ -1,3 +1,24 @@
 {block content}
-{control storyBoard}
-
+<div class="row g-3">
+  <div class="col-auto">  
+    <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#storyboardnew" aria-expanded="false" aria-controls="storyboardnew" style='margin:7px'>
+         New
+    </button>
+    {foreach $all_boards as $dashboard}
+        <a href="{link default,$dashboard['id']}"><button class="btn btn-primary btn-sm" type="button">{$dashboard['name']}</button></a>    
+    {/foreach}    
+  </div>
+  <div class='collapse' id="storyboardnew">  
+     
+        {control storyBoardForm}
+  
+   </div>
+        
+</div>
+<div class="row g-3">  
+    <div class="col-12">
+        <div style='margin:7px'>
+            {control storyBoard}
+        </div>
+    </div>
+</div>
