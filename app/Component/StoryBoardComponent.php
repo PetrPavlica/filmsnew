@@ -6,13 +6,13 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
 {
     public $onStoryBoardSave;
     private $filmsData;
-    public $board_id;
+    public $storyboards_id;
     
     
-    public function __construct(App\Model\FilmsModel $filmsData,$board_id) 
+    public function __construct(App\Model\FilmsModel $filmsData,$storyboards_id) 
     {
         $this->filmsData = $filmsData;
-        $this->board_id = $board_id;
+        $this->storyboards_id = $storyboards_id;
     }
     
     public function createComponentStoryBoardForm(): Form
@@ -31,7 +31,8 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
          
         $form->addUpload('image','obr:');
         
-        $form->addHidden('board_id',$this->board_id);
+        $form->addHidden('id',$this->id);
+        $form->addHidden('storyboards_id',$this->storyboards_id);
          
         $form->addSubmit('send', 'Uložit')
             ->setAttribute('class', 'btn btn-info btn-sm');   
@@ -57,6 +58,6 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
 interface IStoryBoardComponent
 {
     /** @return \StoryBoardComponent */
-    public function create($board_id);
+    public function create($storyboards_id);
 }
 

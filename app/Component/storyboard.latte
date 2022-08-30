@@ -14,11 +14,14 @@
                     <h4 class="card-title">TC: 00:01,0</h4>  
                 </div> 
                 <div class="col-4">
-                     <h4 class="card-title"><label>Délka: </label><input id="minutes" type="number" n:name="minutes" onchange="updatetime();" id="minutes" style="width:60px;height:20px;"></h4> 
+                     <h4 class="card-title"><label>Délka: </label><input type="number" n:name="minutes" onchange="updatetime();" id="minutes" style="width:60px;height:20px;"></h4> 
                 </div>    
                 <div class="col-3" style='text-align:left;'>   
-                    <h4 class="card-title"><label> : </label><input id="seconds" type="number" n:name="seconds" onchange="updatetime();" id="seconds" style="width:62px;height:20px;"></h4> 
+                    <h4 class="card-title"><label> : </label><input type="number" n:name="seconds" onchange="updatetime();" id="seconds" style="width:62px;height:20px;"></h4> 
                 </div>
+                <input id="id" type="hidden" n:name="id"  id="id">
+                <input id="storyboards_id" type="hidden" n:name="storyboards_id"  id="storyboards_id">
+                
         </div>
             
              <div class="row" style='margin-top:5px;'>
@@ -32,6 +35,9 @@
         </div>    
       </div>  
     
-    </form>   
+    </form>
+     <div class="card" style="width:350px;height:400px; ">
+         
+     </div>    
   </li>
 </ul>

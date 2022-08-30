@@ -12,4 +12,8 @@ class FilmsModel extends BaseModel{
         return $this->database->table('storyboards')->fetchAll();
     }
     
+    public function getLastIdStoryBoard(){
+        return $this->database->lastInsertId('storyboards');
+    }
+    
 }
