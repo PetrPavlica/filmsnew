@@ -4,8 +4,12 @@ namespace App\Model;
 
 class FilmsModel extends BaseModel{
     
-     public function addStoryBoard($data){
+    public function addStoryBoard($data){
         return $this->database->table('storyboards')->insert($data);
+    }
+    
+    public function addStoryBoardPicture($data){
+        return $this->database->table('storyboards_pictures')->insert($data);
     }
     
     public function allStoryBoard(){
