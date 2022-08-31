@@ -16,8 +16,8 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
         $this->storyboards_id = $storyboards_id;
     }
     
-    public function newstoryboard(){
-        $this->id = $this->filmsData->addStoryboardPicture($this->storyboards_id);  
+    public function handlenewstoryboard(){
+        $this->id = $this->filmsData->addStoryboardPicture(array('storyboards_id'=>$this->storyboards_id));  
     }
     
     public function createComponentStoryBoardForm(): Form
@@ -56,6 +56,8 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
     
     public function render(): void
     {   
+        $all_pictures = $this->filmsData->allStoryBoardPictures($this->storyboards_id);
+        $this->template->all_pictures = $all_pictures;
         $this->template->storyboard_id = $this->storyboards_id;
         $this->template->render(__DIR__ . '/storyboard.latte');
     }

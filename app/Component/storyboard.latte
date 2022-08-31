@@ -3,9 +3,40 @@
 {block content}
   
 <ul id="sortable">
+  {foreach $all_pictures as $picture} 
+   <li class="ui-state-default">
+    <div class="card" style="width:350px;">
+       <div class="row" style='margin-top:5px;'>
+                <div class="col-2">
+                    <h4 class="card-title">01</h4>  
+                </div>
+                <div class="col-3">
+                    <h4 class="card-title">TC: 00:01,0</h4>  
+                </div> 
+                <div class="col-4">
+                     <h4 class="card-title"></h4> 
+                </div>    
+                <div class="col-3" style='text-align:left;'>   
+                    <h4 class="card-title"></h4> 
+                </div>
+        </div>
+            
+             <div class="row" style='margin-top:5px;'>
+                 <div id="droppable" class="ui-widget-header">
+                     <p>Drop here</p>
+                 </div>
+             </div>
+   
+        <div class="card-body">
+            <p class="card-text">Some example text.</p>
+        </div>    
+      </div>  
+
+  </li>
+  {/foreach}   
   <li class="ui-state-default">
    <form n:name="storyBoardForm" class='form style-form' id="storyboard">   
-    <div class="card" style="width:350px">
+    <div class="card" style="width:350px;">
        <div class="row" style='margin-top:5px;'>
                 <div class="col-2">
                     <h4 class="card-title">01</h4>  
@@ -39,11 +70,9 @@
          
   </li>
   
-     
-   
+<li class="ui-state-default">     
+    <a href="{link newstoryboard!}">
+        New
+    </a>
+</li>        
 </ul>
-<a href="{link new!,$storyboard_id}">
-<div class="card" style="width:350px;height:400px; ">
-      
-</div>
-</a>
