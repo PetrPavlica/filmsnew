@@ -3,46 +3,17 @@
 {block content}
   
 <ul id="sortable">
-  {foreach $all_pictures as $picture} 
-   <li class="ui-state-default">
+  {foreach $all_pictures as $picture}
+     {if $action === 'new' and $id === $picture['id']}
+  <li id="{$picture['id']}" class="ui-state-default">
+   <form n:name="storyBoardForm" class='form style-form' id="storyboardform">   
     <div class="card" style="width:350px;">
        <div class="row" style='margin-top:5px;'>
                 <div class="col-2">
-                    <h4 class="card-title">01</h4>  
+                    <h4 class="card-title">{$picture['position']}</h4>  
                 </div>
                 <div class="col-3">
-                    <h4 class="card-title">TC: 00:01,0</h4>  
-                </div> 
-                <div class="col-4">
-                     <h4 class="card-title"></h4> 
-                </div>    
-                <div class="col-3" style='text-align:left;'>   
-                    <h4 class="card-title"></h4> 
-                </div>
-        </div>
-            
-             <div class="row" style='margin-top:5px;'>
-                 <div id="droppable" class="ui-widget-header">
-                     <p>Drop here</p>
-                 </div>
-             </div>
-   
-        <div class="card-body">
-            <p class="card-text">Some example text.</p>
-        </div>    
-      </div>  
-
-  </li>
-  {/foreach}   
-  <li class="ui-state-default">
-   <form n:name="storyBoardForm" class='form style-form' id="storyboard">   
-    <div class="card" style="width:350px;">
-       <div class="row" style='margin-top:5px;'>
-                <div class="col-2">
-                    <h4 class="card-title">01</h4>  
-                </div>
-                <div class="col-3">
-                    <h4 class="card-title">TC: 00:01,0</h4>  
+                    <h4 class="card-title">TC: </h4>  
                 </div> 
                 <div class="col-4">
                      <h4 class="card-title"><label>Délka: </label><input type="number" n:name="minutes" onchange="updatetime();" id="minutes" style="width:60px;height:20px;"></h4> 
@@ -50,25 +21,55 @@
                 <div class="col-3" style='text-align:left;'>   
                     <h4 class="card-title"><label> : </label><input type="number" n:name="seconds" onchange="updatetime();" id="seconds" style="width:62px;height:20px;"></h4> 
                 </div>
-                <input id="id" type="hidden" n:name="id"  id="id">
+                <input id="picture_id" type="hidden" n:name="picture_id">
                 <input id="storyboards_id" type="hidden" n:name="storyboards_id"  id="storyboards_id">
+                
                 
         </div>
             
              <div class="row" style='margin-top:5px;'>
                  <div id="droppable" class="ui-widget-header">
-                     <p>Drop here</p>
+                    <input type="file" n:name="image" id="image" onchange="uploadimage();">
                  </div>
              </div>
    
-        <div class="card-body">
-            <p class="card-text">Some example text.</p>
+        <div class="row" style='margin-top:5px;'>
+            <textarea n:name="text" id="voicetext" style="width:340px;height:200px;"></textarea>
         </div>    
       </div>  
     
     </form>
          
   </li>
+{else}     
+   <li id="{$picture['id']}" class="ui-state-default">
+    <div class="card" style="width:350px;">
+       <div class="row" style='margin-top:5px;'>
+                <div class="col-2">
+                    <h4 class="card-title">{$picture['position']}</h4>  
+                </div>
+                <div class="col-5">
+                    <h4 class="card-title">TC: {$all_tc_minutes[$picture['id']]}:{$all_tc_seconds[$picture['id']]}</h4>  
+                </div> 
+                <div class="col-5" style='text-align:left;'>   
+                    <h4 class="card-title">Délka: {if $picture['minutes'] < 10}0{/if}{$picture['minutes']}:{if $picture['seconds'] < 10}0{/if}{$picture['seconds']|number:1, ',', ' '}</h4> 
+                </div>
+        </div>
+            
+             <div class="row">
+                  <div class="col-12 d-flex justify-content-center text-center">
+                     <img src="{$basePath}/{$picture['storyboards_id']}/{$picture['picture']}" style='max-width:350px;max-height:230px;'>
+                  </div>
+             </div>
+   
+        <div class="card-body">
+            <p class="card-text">{$picture['text']}</p>
+        </div>    
+      </div>  
+
+  </li>
+{/if}
+  {/foreach}
   
 <li class="ui-state-default">     
     <a href="{link newstoryboard!}">
@@ -76,3 +77,32 @@
     </a>
 </li>        
 </ul>
+<div class="row">
+<h1 class="text-light">Text to Speech</h1>
+    <p class="lead text-light mt-4">Select Voice</p>
+    <select id="voices" class="form-select bg-secondary text-light"></select>
+    <div class="d-flex mt-4 text-light">
+      <div>
+        <p class="lead">Volume</p>
+        <input type="range" min="0" max="1" value="1" step="0.1" id="volume" />
+        <span id="volume-label" class="ms-2">1</span>
+      </div>
+      <div class="mx-5">
+        <p class="lead">Rate</p>
+        <input type="range" min="0.1" max="10" value="1" id="rate" step="0.1" />
+        <span id="rate-label" class="ms-2">1</span>
+      </div>
+      <div>
+        <p class="lead">Pitch</p>
+        <input type="range" min="0" max="2" value="1" step="0.1" id="pitch" />
+        <span id="pitch-label" class="ms-2">1</span>
+      </div>
+    </div>
+    <textarea class="form-control bg-dark text-light mt-5" cols="30" rows="10" placeholder="Type here..."></textarea>
+    <div class="mb-5">
+      <button id="start" class="btn btn-success mt-5 me-3">Start</button>
+      <button id="pause" class="btn btn-warning mt-5 me-3">Pause</button>
+      <button id="resume" class="btn btn-info mt-5 me-3">Resume</button>
+      <button id="cancel" class="btn btn-danger mt-5 me-3">Cancel</button>
+    </div>
+ </div>   

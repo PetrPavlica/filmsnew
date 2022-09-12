@@ -8,7 +8,8 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
     private $filmsData;
     public $storyboards_id;
     public $id=0;
-    
+    public $action = NULL;
+  
     
     public function __construct(App\Model\FilmsModel $filmsData,$storyboards_id) 
     {
@@ -17,7 +18,12 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
     }
     
     public function handlenewstoryboard(){
-        $this->id = $this->filmsData->addStoryboardPicture(array('storyboards_id'=>$this->storyboards_id));  
+        $count_pictures = $this->filmsData->countPictures($this->storyboards_id);
+        $position = $count_pictures + 1;
+        $save = $this->filmsData->addStoryboardPicture(array('storyboards_id'=>$this->storyboards_id,
+                                                            'position'=>$position));
+        $this->id = $save['id'];  
+        $this->action = 'new';
     }
     
     public function createComponentStoryBoardForm(): Form
@@ -36,8 +42,9 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
          
         $form->addUpload('image','obr:');
         
-        $form->addHidden('id',$this->id);
+        $form->addHidden('picture_id',$this->id);
         $form->addHidden('storyboards_id',$this->storyboards_id);
+        $form->addHidden('action',$this->action);
          
         $form->addSubmit('send', 'Uložit')
             ->setAttribute('class', 'btn btn-info btn-sm');   
@@ -57,8 +64,23 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
     public function render(): void
     {   
         $all_pictures = $this->filmsData->allStoryBoardPictures($this->storyboards_id);
+        $tc_seconds = 0;
+        $all_tc_minutes = [];
+        $all_tc_seconds = [];
+        foreach($all_pictures as $picture){
+           $picture_seconds = $picture['minutes']*60 + $picture['seconds'];
+           $tc_seconds = $tc_seconds + $picture_seconds;
+           $tc_minutes = $tc_seconds/60;
+           $after_floor = $tc_minutes - floor($tc_minutes/60);
+           $all_tc_seconds[$picture['id']] = $after_floor * 60;
+           $all_tc_minutes[$picture['id']] = floor($tc_seconds/60); 
+        }
+        $this->template->id = $this->id;
+        $this->template->all_tc_minutes = $all_tc_minutes;
+        $this->template->all_tc_seconds = $all_tc_seconds;
         $this->template->all_pictures = $all_pictures;
         $this->template->storyboard_id = $this->storyboards_id;
+        $this->template->action = $this->action;
         $this->template->render(__DIR__ . '/storyboard.latte');
     }
 }

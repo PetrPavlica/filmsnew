@@ -26,7 +26,8 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/js/bootstrap.bundle.min.js"></script>
            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/4.0.11/jquery.uploadfile.min.js" integrity="sha512-uwNlWrX8+f31dKuSezJIHdwlROJWNkP6URRf+FSWkxSgrGRuiAreWzJLA2IpyRH9lN2H67IP5H4CxBcAshYGNw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script>
+           <script src="{$basePath}/js/textToSpeech.js"></script> 
+           <script>
             $( function() {
               $( "#sortable" ).sortable();
             } );
@@ -45,17 +46,20 @@
            </script>
            <script>
                 function uploadimage(){
-                        let link = {link uploadimage!};
-                        let data = new FormData($('#formWithFiles')[0]);
-                        alert(data);
-                        $.ajax({
-                                type: 'GET',
+                         let formData = new FormData();
+                         var d = $('#image')[0].files[0];
+                         let picture_id = document.getElementById("picture_id").value;
+                         let storyboards_id = document.getElementById("storyboards_id").value;
+                         formData.append('fileimage',d);
+                         formData.append('picture_id',picture_id);
+                         formData.append('storyboards_id',storyboards_id);
+                         let link = {link uploadimage!};
+                         $.ajax({
+                                type: 'POST',
                                 url: link,
-                                enctype: 'multipart/form-data',
-                                data: data,
+                                contentType: false,
                                 processData: false,
-                                contentType: false
-                                
+                                data: formData
                         });
                         
                 };
@@ -64,19 +68,46 @@
              <script>
                 function updatetime(){
                         let link = {link updatetime!};
-                        let hours = document.getElementById("hours").value;
                         let minutes = document.getElementById("minutes").value;
                         let seconds = document.getElementById("seconds").value;
-                        let seconds = document.getElementById("seconds").value;
+                        let picture_id = document.getElementById("picture_id").value;
+                        let storyboards_id = document.getElementById("storyboards_id").value;
                         $.ajax({
                                 type: 'GET',
                                 url: link,
-                                data: { hours: hours, minutes: minutes, seconds: seconds }
+                                data: { minutes: minutes, seconds: seconds,picture_id : picture_id, storyboards_id : storyboards_id }
                         });
                         
                 };
 
             </script>
+            <script>
+            $(document).ready(function(){
+              $('#sortable').sortable({
+                update: function(event, ui) {
+                    var newOrder = $(this).sortable('toArray').toString();
+                    let link = {link newpositions!};
+                    $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { positions: newOrder}
+                        });
+                }
+                });
+            });
+            </script>
+            <script>
+                $('#voicetext').focusout(function() {
+                    let link = {link updatetext!};
+                        let text = document.getElementById("voicetext").value;
+                        let picture_id = document.getElementById("picture_id").value;
+                        $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { text: text, picture_id : picture_id }
+                        });
+                });
+            </script>    
         {/block}
 </body>
 </html>

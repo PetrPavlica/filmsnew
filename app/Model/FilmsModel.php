@@ -13,9 +13,13 @@ class FilmsModel extends BaseModel{
     }
     
     public function allStoryBoardPictures($storyboard_id){
-        return $this->database->table('storyboards_pictures')->where('storyboards_id',$storyboard_id)->fetchAll();
+        return $this->database->table('storyboards_pictures')->where('storyboards_id',$storyboard_id)->order('position')->fetchAll();
     }
     
+    public function countPictures($storyboard_id){
+        return $this->database->table('storyboards_pictures')->where('storyboards_id',$storyboard_id)->order('position')->count();
+    }
+        
     public function allStoryBoard(){
         return $this->database->table('storyboards')->fetchAll();
     }
@@ -27,5 +31,17 @@ class FilmsModel extends BaseModel{
     public function updatePicture($id,$data){
         $select = $this->database->table('storyboards_pictures')->where('id',$id)->fetch();
         $select->update($data);
+    }
+    
+    public function updatePositions($positions){
+       foreach($positions as $position=>$id){
+          if($id !== ''){
+            $select = $this->database->table('storyboards_pictures')->where('id',$id)->fetch();
+            $select->update(['position'=>$position]);
+       
+          }
+        } 
+    
+         
     }
 }
