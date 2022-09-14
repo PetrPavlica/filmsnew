@@ -65,15 +65,19 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
     {   
         $all_pictures = $this->filmsData->allStoryBoardPictures($this->storyboards_id);
         $tc_seconds = 0;
+        $after_floor = 0;
         $all_tc_minutes = [];
         $all_tc_seconds = [];
         foreach($all_pictures as $picture){
+           $all_tc_seconds[$picture['id']] = $after_floor * 60;
+           $all_tc_minutes[$picture['id']] = round($tc_seconds/60,2); 
            $picture_seconds = $picture['minutes']*60 + $picture['seconds'];
            $tc_seconds = $tc_seconds + $picture_seconds;
-           $tc_minutes = $tc_seconds/60;
-           $after_floor = $tc_minutes - floor($tc_minutes/60);
-           $all_tc_seconds[$picture['id']] = $after_floor * 60;
-           $all_tc_minutes[$picture['id']] = floor($tc_seconds/60); 
+           bdump($tc_seconds);
+           $tc_minutes = round($tc_seconds/60);
+            bdump($tc_minutes);
+           $after_floor = $tc_seconds/60 - round($tc_minutes,2);
+           bdump($after_floor);
         }
         $this->template->id = $this->id;
         $this->template->all_tc_minutes = $all_tc_minutes;
