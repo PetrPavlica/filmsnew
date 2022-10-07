@@ -1,13 +1,18 @@
 {* Latte template *}
 
 {block content}
-  
+{if $storyboard_id != 0}
+<h3 style='margin:10px;'>{$storyboard['name']}</h3>
+{/if}
+ <div class="row" style='margin:10px;'> 
+
 <ul id="sortable">
   {foreach $all_pictures as $picture}
-     {if $action === 'new' and $id === $picture['id']}
+{if ($action === 'edit' or $action === 'new') and $id == $picture['id']}
+         
   <li id="{$picture['id']}" class="ui-state-default">
    <form n:name="storyBoardForm" class='form style-form' id="storyboardform">   
-    <div class="card" style="width:350px;">
+    <div class="card" style="width:350px;height:500px;">
        <div class="row" style='margin-top:5px;'>
                 <div class="col-2">
                     <h4 class="card-title">{$picture['position']}</h4>  
@@ -21,11 +26,10 @@
                 <div class="col-3" style='text-align:left;'>   
                     <h4 class="card-title"><label> : </label><input type="number" n:name="seconds" onchange="updatetime();" id="seconds" style="width:62px;height:20px;"></h4> 
                 </div>
+                
                 <input id="picture_id" type="hidden" n:name="picture_id">
                 <input id="storyboards_id" type="hidden" n:name="storyboards_id"  id="storyboards_id">
-                
-                
-        </div>
+         </div>
             
              <div class="row" style='margin-top:5px;'>
                  <div id="droppable" class="ui-widget-header">
@@ -34,7 +38,7 @@
              </div>
    
         <div class="row" style='margin-top:5px;'>
-            <textarea n:name="text" id="voicetext" style="width:340px;height:200px;"></textarea>
+            <textarea n:name="text" id="voicetext" style="width:340px;height:300px;margin-left: 15px;font-size: 16px;"></textarea>
         </div>    
       </div>  
     
@@ -43,13 +47,13 @@
   </li>
 {else}     
    <li id="{$picture['id']}" class="ui-state-default">
-    <div class="card" style="width:350px;">
+    <div class="card" style="width:350px;height:500px;">
        <div class="row" style='margin-top:5px;'>
                 <div class="col-2">
                     <h4 class="card-title">{$picture['position']}</h4>  
                 </div>
                 <div class="col-5">
-                    <h4 class="card-title">TC: {$all_tc_minutes[$picture['id']]}:{$all_tc_seconds[$picture['id']]}</h4>  
+                    <h4 class="card-title">TC: {if $all_tc_minutes[$picture['id']] < 10}0{/if}{$all_tc_minutes[$picture['id']]}:{if $all_tc_seconds[$picture['id']] < 10}0{/if}{$all_tc_seconds[$picture['id']]}</h4>  
                 </div> 
                 <div class="col-5" style='text-align:left;'>   
                     <h4 class="card-title">Délka: {if $picture['minutes'] < 10}0{/if}{$picture['minutes']}:{if $picture['seconds'] < 10}0{/if}{$picture['seconds']|number:1, ',', ' '}</h4> 
@@ -57,29 +61,50 @@
         </div>
             
              <div class="row">
+                 {if $picture['picture'] != NULL}
+                     
                   <div class="col-12 d-flex justify-content-center text-center">
                      <img src="{$basePath}/{$picture['storyboards_id']}/{$picture['picture']}" style='max-width:350px;max-height:230px;'>
                   </div>
+                  {else}
+                  <div id="droppable">Přidejte obrázek</div>    
+                 {/if} 
              </div>
-   
+                 
         <div class="card-body">
             <p class="card-text">{$picture['text']}</p>
-        </div>    
+        </div>
+        <h4>{$all_message[$picture['id']]}</h4>
+        <div class="card-footer" style="height:50px;">
+        <a href="{plink Films:picturechange,$picture['id'],$storyboard_id}"><button class="btn btn-primary btn-sm" style="margin-bottom: 150px;"><i class="fa fa-image"></i></button></a>    
+        <a href="{plink storyBoard:edit!,$picture['id']}"><button class="btn btn-primary btn-sm" style="margin-bottom: 150px;"><i class="fa fa-pencil"></i></button></a>
+        <a href="{plink storyBoard:delete!,$picture['id']}"><button class="btn btn-danger btn-sm" style="margin-bottom: 150px;"><i class="fa fa-trash "></i></button></a>
+      </div>
       </div>  
 
   </li>
 {/if}
   {/foreach}
-  
+ {if $storyboard_id != 0}   
 <li class="ui-state-default">     
     <a href="{link newstoryboard!}">
-        New
+       <div class="card" style="width:350px;height:500px;">
+           <button class="btn btn-success mt-5 me-3">New</button>
+       </div>    
     </a>
 </li>        
 </ul>
+</div>
+{else}
+    
+        <h2 style="margin-left: 20px;">Vyberte kategorii</h2>
+     
+{/if}
+{if $action != 'new' or $action != 'edit'}  
 <div class="row">
-<h1 class="text-light">Text to Speech</h1>
-    <p class="lead text-light mt-4">Select Voice</p>
+<form n:name='playTextForm'>     
+<h1 class="text-light">Přečtení textu</h1>
+    <p class="lead text-light mt-4">Výběr hlasu</p>
     <select id="voices" class="form-select bg-secondary text-light"></select>
     <div class="d-flex mt-4 text-light">
       <div>
@@ -98,11 +123,14 @@
         <span id="pitch-label" class="ms-2">1</span>
       </div>
     </div>
-    <textarea class="form-control bg-dark text-light mt-5" cols="30" rows="10" placeholder="Type here..."></textarea>
-    <div class="mb-5">
+    <textarea n:name='play_text' class="form-control bg-dark text-light mt-5" cols="30" rows="10" placeholder="Text"></textarea>
+    
+     </form>
+     <div class="mb-5">
       <button id="start" class="btn btn-success mt-5 me-3">Start</button>
       <button id="pause" class="btn btn-warning mt-5 me-3">Pause</button>
       <button id="resume" class="btn btn-info mt-5 me-3">Resume</button>
       <button id="cancel" class="btn btn-danger mt-5 me-3">Cancel</button>
     </div>
- </div>   
+ </div>
+{/if}

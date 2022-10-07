@@ -1,0 +1,32 @@
+{* Latte template *}
+
+{block content}
+<style>
+  .draggable { border: solid #ffffff 1px;width:320px;height:180px; }
+  #draggable, #draggable2 { margin-bottom:20px; }
+  #draggable { cursor: n-resize; }
+  #draggable2 { cursor: e-resize; }
+  #containment-wrapper { width: 95%; height:350px; border:2px solid #ccc; padding: 10px; }
+  h3 { clear: left; }
+  </style>
+<h3>Constrain movement along an axis:</h3>
+<form n:name="imageResizeForm" class="row g-3" id="storyboard">
+       <div class="row align-items-center justify-content-center">
+             <div class="col-6">
+                 <label>Nová šířka</label>
+                <input id="new_width" type="number" n:name="new_width">
+             </div>
+       </div>
+       <div class="row align-items-center justify-content-center">
+             <div class="col-6">
+                 <label>Nová výška</label>
+                <input id="new_height" type="number" n:name="new_height">
+             </div>
+       </div> 
+   </form>   
+<div id="containment-wrapper" style="width:{$picture['max_width'] + 20}px;height:599px;">
+    <img src="{$basePath}/{$storyboards_id}/{$picture['picture']}" style="width:{$picture['max_width']|noescape}px;">
+    <div id="draggable3" class="draggable ui-widget-content">
+        
+    </div>
+</div>    

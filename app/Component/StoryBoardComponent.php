@@ -26,13 +26,26 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
         $this->action = 'new';
     }
     
+    public function handleedit($id){
+        $picture = $this->filmsData->pictureById($id);
+        $data_default = array('minutes'=>$picture['minutes'],
+                      'seconds'=>$picture['seconds'],
+                      'text'=>$picture['text']);
+        $this->id = $id;
+        $this->storyboards_id = $picture['storyboards_id'];
+        $this->action = 'edit';
+         $this['storyBoardForm']->setDefaults($data_default);
+    }
+    
+    public function handledelete($id){
+        $this->filmsData->deletePicture($id);
+    }
+    
     public function createComponentStoryBoardForm(): Form
 
     {
         $form = new Form();
-        
-        $form->addInteger('hours','Hodiny:');
-        
+      
         $form->addInteger('minutes','Minuty:');
         //    ->setHtmlAttribute('onchange', 'ares()');
         
@@ -55,6 +68,14 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
         return $form;
     }
     
+    public function createComponentPlayTextForm(): Form
+
+    {   
+        $form = new Form();
+        $form->addTextArea('play_text','Text:'); 
+         $form->addSelect('voices','Voices:');
+         return $form;
+    }
     public function processForm($form): void
     {
         $data = $form->getValues(true);
@@ -65,26 +86,41 @@ final class StoryBoardComponent extends Nette\Application\UI\Control
     {   
         $all_pictures = $this->filmsData->allStoryBoardPictures($this->storyboards_id);
         $tc_seconds = 0;
-        $after_floor = 0;
+        $tc_minutes = 0;
         $all_tc_minutes = [];
         $all_tc_seconds = [];
+        $all_message = [];
+        $picture_all_text = '';
+        $storyboard = $this->filmsData->getStoryBoardById($this->storyboards_id);
         foreach($all_pictures as $picture){
-           $all_tc_seconds[$picture['id']] = $after_floor * 60;
-           $all_tc_minutes[$picture['id']] = round($tc_seconds/60,2); 
-           $picture_seconds = $picture['minutes']*60 + $picture['seconds'];
-           $tc_seconds = $tc_seconds + $picture_seconds;
-           bdump($tc_seconds);
-           $tc_minutes = round($tc_seconds/60);
-            bdump($tc_minutes);
-           $after_floor = $tc_seconds/60 - round($tc_minutes,2);
-           bdump($after_floor);
-        }
+           $all_tc_seconds[$picture['id']] = $tc_seconds;
+           $all_tc_minutes[$picture['id']] = $tc_minutes; 
+           $tc_seconds = $tc_seconds + $picture['seconds'];
+           if($tc_seconds > 60){
+              $up_to = $tc_seconds - 60;
+              $tc_seconds = $tc_seconds + $up_to;
+              $tc_minutes = $tc_minutes + 1; 
+           }
+           $tc_minutes = $tc_minutes + $picture['minutes'];
+           $picture_all_text = $picture_all_text.' '.$picture['text'];
+           $text_array = explode(' ',$picture['text']);
+           if(count($text_array)*3<($picture['minutes']*60 + $picture['seconds'])){
+               $all_message[$picture['id']] = '';
+           }
+           else{
+              $all_message[$picture['id']] = 'Pozor dlouhý text';  
+           }
+       }
+        $this['playTextForm']->setDefaults(['play_text' => $picture_all_text]);
+        
         $this->template->id = $this->id;
+        $this->template->storyboard = $storyboard;
         $this->template->all_tc_minutes = $all_tc_minutes;
         $this->template->all_tc_seconds = $all_tc_seconds;
         $this->template->all_pictures = $all_pictures;
         $this->template->storyboard_id = $this->storyboards_id;
         $this->template->action = $this->action;
+        $this->template->all_message = $all_message;
         $this->template->render(__DIR__ . '/storyboard.latte');
     }
 }

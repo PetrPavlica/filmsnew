@@ -28,9 +28,18 @@ class FilmsModel extends BaseModel{
         return $this->database->lastInsertId('storyboards');
     }
     
+    public function getStoryBoardById($id){
+        return $this->database->table('storyboards')->where('id',$id)->fetch();
+    }
+    
     public function updatePicture($id,$data){
         $select = $this->database->table('storyboards_pictures')->where('id',$id)->fetch();
         $select->update($data);
+    }
+    
+    public function deletePicture($id){
+        $select = $this->database->table('storyboards_pictures')->where('id',$id)->fetch();
+        $select->delete();
     }
     
     public function updatePositions($positions){
@@ -41,7 +50,9 @@ class FilmsModel extends BaseModel{
        
           }
         } 
+    }
     
-         
+    public function pictureById($id){
+        return $this->database->table('storyboards_pictures')->where('id',$id)->fetch();
     }
 }

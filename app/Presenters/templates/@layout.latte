@@ -12,8 +12,8 @@
 <body>
         <style>
             #sortable { list-style-type: none; margin: 0; padding: 0; width: 90% }
-            #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 350px; height: 290px; font-size: 4em; text-align: center; }
-            #droppable { width: 91%; height: 150px;background-color: white; margin-left: 15px;}
+            #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 350px; height: 600px; font-size: 4em; text-align: center; }
+            #droppable { width: 91%; height: 150px;background-color: white; margin-left: 15px;font-size: 12px;}
             h4 { font-size:0.22em; color:white;}
             p { font-size:0.2em; }
         </style>
@@ -107,6 +107,32 @@
                                 data: { text: text, picture_id : picture_id }
                         });
                 });
+            </script>
+            <script>
+                $( function() {
+                  $( "#draggable" ).draggable({ axis: "y" });
+                  $( "#draggable2" ).draggable({ axis: "x" });
+
+                  $( "#draggable3" ).draggable({ containment: "#containment-wrapper", scroll: false });
+                  $( "#draggable4" ).draggable({ containment: "parent" });
+                } );
+            </script>
+            <script>
+                var dragposition = '';
+                let link = {link updateposition!};
+                $('#draggable3').draggable({
+                   // other options...
+                   drag: function(event,ui){
+                      dragposition = ui.position;
+                      $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { left: dragposition.left, top : dragposition.top }
+                        });
+                   }
+                   
+                });
+                
             </script>    
         {/block}
 </body>
