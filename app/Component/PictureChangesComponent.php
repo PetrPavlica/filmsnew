@@ -40,7 +40,10 @@ final class PictureChangesComponent extends Nette\Application\UI\Control
             ->setDefaultValue($picture['max_width']);
         
         $form->addInteger('new_height','Sirka:')
-            ->setRequired('Zadejte cislo');
+            ->setRequired('Zadejte cislo')
+            ->setDefaultValue($picture['max_height']);
+        
+        $form->addCheckbox('usecrop','Použít crop:');
         
         
         $form->addSubmit('send', 'Uložit')

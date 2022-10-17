@@ -6,44 +6,65 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5/dist/slate/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0/css/all.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
         <title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
 </head>
 
 <body>
         <style>
             #sortable { list-style-type: none; margin: 0; padding: 0; width: 90% }
-            #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 350px; height: 600px; font-size: 4em; text-align: center; }
+            #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 370px; height: 400px; font-size: 4em; text-align: center;background-color: transparent;border: 0px; }
             #droppable { width: 91%; height: 150px;background-color: white; margin-left: 15px;font-size: 12px;}
             h4 { font-size:0.22em; color:white;}
-            p { font-size:0.2em; }
+            p { font-size:0.2em; color:white;}
         </style>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
         
             {include content}
 
 	{block scripts}
-            <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.1/jquery-ui.min.js"></script>
+            <script src="https://unpkg.com/naja@2/dist/Naja.min.js"></script>
+           <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+                 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2/dist/js/bootstrap.bundle.min.js"></script>
            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/4.0.11/jquery.uploadfile.min.js" integrity="sha512-uwNlWrX8+f31dKuSezJIHdwlROJWNkP6URRf+FSWkxSgrGRuiAreWzJLA2IpyRH9lN2H67IP5H4CxBcAshYGNw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
            <script src="{$basePath}/js/textToSpeech.js"></script> 
+           <script>
+            naja.initialize();
+           </script>
            <script>
             $( function() {
               $( "#sortable" ).sortable();
             } );
           </script>
           <script>
-            $( function() {
-              $( "#droppable" ).droppable({
-                drop: function( event, ui ) {
-                  $( this )
-                    .addClass( "ui-state-highlight" )
-                    .find( "p" )
-                      .html( "Dropped!" );
-                }
-              });
-            } );
-           </script>
+            $(function() {
+                 $('#dragable3').draggable();
+                 $('#resizable').resizable();
+            });
+         </script>
+         <script>
+           $( "#resizable" ).resizable({
+                
+                stop: function( event, ui ) {
+                let link = {link updatesizecrop!};    
+                height = $("#resizable").height(); 
+
+                width = $("#resizable").width(); 
+                $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { width: width, height : height }
+                        });
+             } 
+            });
+            </script>
+           <script>
+                $( function() {
+                  $( "#resizable" ).resizable({ aspectRatio: true });
+                } );
+                </script>
            <script>
                 function uploadimage(){
                          let formData = new FormData();
@@ -68,14 +89,26 @@
              <script>
                 function updatetime(){
                         let link = {link updatetime!};
-                        let minutes = document.getElementById("minutes").value;
                         let seconds = document.getElementById("seconds").value;
                         let picture_id = document.getElementById("picture_id").value;
                         let storyboards_id = document.getElementById("storyboards_id").value;
                         $.ajax({
                                 type: 'GET',
                                 url: link,
-                                data: { minutes: minutes, seconds: seconds,picture_id : picture_id, storyboards_id : storyboards_id }
+                                data: { seconds: seconds,picture_id : picture_id, storyboards_id : storyboards_id }
+                        });
+                        
+                };
+
+            </script>
+            <script>
+                function updatepicturesizewidth(){
+                        let link = {link updatepicturesizewidth!};
+                        let width = document.getElementById("rangepicture").value;
+                        $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { width: width}
                         });
                         
                 };
@@ -109,6 +142,18 @@
                 });
             </script>
             <script>
+                $('#aboutetext').focusout(function() {
+                    let link = {link updateaboutetext!};
+                        let aboutetext = document.getElementById("aboutetext").value;
+                        let picture_id = document.getElementById("picture_id").value;
+                        $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { aboute_text: aboutetext, picture_id : picture_id }
+                        });
+                });
+            </script>
+            <script>
                 $( function() {
                   $( "#draggable" ).draggable({ axis: "y" });
                   $( "#draggable2" ).draggable({ axis: "x" });
@@ -133,7 +178,26 @@
                    
                 });
                 
-            </script>    
+            </script>
+            <script>
+                function updatecrop(){
+                        let link = {link updatecrop!};
+                        if ($('#usecrop').is(":checked"))
+                        {
+                          crop = 1;
+                        }
+                        else{
+                          crop = 0;  
+                        }
+                        $.ajax({
+                                type: 'GET',
+                                url: link,
+                                data: { usecrop: crop }
+                        });
+                        
+                };
+
+            </script>
         {/block}
 </body>
 </html>

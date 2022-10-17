@@ -8,25 +8,30 @@
   #draggable2 { cursor: e-resize; }
   #containment-wrapper { width: 95%; height:350px; border:2px solid #ccc; padding: 10px; }
   h3 { clear: left; }
+  p { color: white; }
   </style>
 <h3>Constrain movement along an axis:</h3>
 <form n:name="imageResizeForm" class="row g-3" id="storyboard">
-       <div class="row align-items-center justify-content-center">
+               
+        <div class="row align-items-center justify-content-center">
              <div class="col-6">
-                 <label>Nová šířka</label>
-                <input id="new_width" type="number" n:name="new_width">
-             </div>
-       </div>
-       <div class="row align-items-center justify-content-center">
-             <div class="col-6">
-                 <label>Nová výška</label>
-                <input id="new_height" type="number" n:name="new_height">
+                 <label>Use crop</label>
+                <input id="usecrop" type="checkbox" n:name="usecrop" onchange="updatecrop();">
              </div>
        </div> 
-   </form>   
-<div id="containment-wrapper" style="width:{$picture['max_width'] + 20}px;height:599px;">
-    <img src="{$basePath}/{$storyboards_id}/{$picture['picture']}" style="width:{$picture['max_width']|noescape}px;">
-    <div id="draggable3" class="draggable ui-widget-content">
-        
+   </form>
+    <div class="row align-items-center justify-content-center">
+        <input type="range" class="form-range" min="350" max="1024" step="1" id="rangepicture" style="width:1024px;" onchange="updatepicturesizewidth();">
     </div>
+<div id="containment-wrapper" style="width:{$picture['max_width'] + 25}px;height:{$picture['max_height'] + 20}px;">
+     <div id="draggable3" class="draggable ui-widget-content" style="background-color:transparent;border: 0px;">
+         <div id="resizable" class="draggable ui-widget-content" style="background-color:transparent;">
+
+    </div>      
+    </div>
+    <img src="{$basePath}/{$storyboards_id}/{$picture['picture']}" 
+         style="width:{$picture['max_width']|noescape}px;height:{$picture['max_height']|noescape}px;position:relative;left:0;top:-180px;z-index :-1;">
+
+           
 </div>    
+    

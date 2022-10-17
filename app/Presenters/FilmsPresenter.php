@@ -34,21 +34,58 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
            $ratio = 1024 / imagesx($image_gd);
            $height = imagesy($image_gd) * $ratio;
            $new_image = imagecreatetruecolor(1024, intval($height));
-           imagecopyresampled($new_image, $image_gd, 0, 0, 0, 0, 1054, intval($height), imagesx($image_gd), imagesy($image_gd));
+           imagecopyresampled($new_image, $image_gd, 0, 0, 0, 0, 1024, intval($height), imagesx($image_gd), imagesy($image_gd));
            imagejpeg($new_image, __DIR__ . '../../../www/'.'/'.$storyboards_id.'/' . $file_name_r, 90);
            //$image_resize = imagescale ( $image_gd , 1024 , 768 );
            //$image_resize->save(__DIR__ . '../../../www/'.'/'.$storyboards_id.'/'.$file_name_r);
            $this->filmsData->updatePicture($picture_id, array('picture'=>$file_name,
-                                                              'file_ext'=>$file_ext));
+                                                              'file_ext'=>$file_ext,
+                                                               'max_height'=>$height));
        }
     }
     
-    public function handleupdatetime($minutes,$seconds,$picture_id, $storyboards_id) 
+    public function handleupdatepicturesizewidth($width) 
+    {  
+        
+       $storyboards_id = $this->getParameter('storyboard_id');
+       $picture_id = $this->getParameter('picture_id');
+       $picture = $this->filmsData->pictureById($picture_id);
+       if($picture['max_width']<=intval($width)){
+        $file_name = $picture_id.$picture['file_ext'];
+       }
+       else{
+        $file_name = $picture_id.'resize'.$picture['file_ext'];
+       
+       }   
+           $file_name_r = $picture_id.'resize'.$picture['file_ext']; 
+           $image_gd = imagecreatefromjpeg(__DIR__ . '../../../www/'.'/'.$storyboards_id.'/'.$file_name);
+           $ratio = intval($width) / imagesx($image_gd);
+           $height = imagesy($image_gd) * $ratio;
+           $new_image = imagecreatetruecolor(intval($width), intval($height));
+           imagecopyresampled($new_image, $image_gd, 0, 0, 0, 0, 1024, intval($height), imagesx($image_gd), imagesy($image_gd));
+           imagejpeg($new_image, __DIR__ . '../../../www/'.'/'.$storyboards_id.'/' . $file_name_r, 90);
+           $this->filmsData->updatePicture($picture_id, array('picture'=>$file_name,
+                                                              'max_width'=>$width,  
+                                                              'max_height'=>$height));
+           
+          $this->redirect('this');
+           
+    }
+    
+    public function handleupdatetime($seconds,$picture_id, $storyboards_id) 
     {
-         $data = array('minutes'=>$minutes,
-                        'seconds' => $seconds,
+         $data = array( 'seconds' => $seconds,
                        );   
          $this->filmsData->updatePicture($picture_id, $data);
+    }
+    
+    public function handleupdatecrop($usecrop,$picture_id) 
+    {   
+        bdump($usecrop);
+         $data = array('use_crop' => $usecrop
+                       );   
+         $this->filmsData->updatePicture($picture_id, $data);
+  
     }
     
     public function handleupdatetext($picture_id,$text) 
@@ -56,28 +93,57 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
     $this->filmsData->updatePicture($picture_id,['text'=>$text]);
     }
     
+    public function handleupdateaboutetext($picture_id,$aboute_text) 
+    { 
+   
+    $this->filmsData->updatePicture($picture_id,['text_aboute'=>$aboute_text]);
+    }
+    
+    
+    
     public function handlenewpositions($positions) 
     {    
         $this->filmsData->updatePositions(explode(',',$positions));
     }
     
+    
     public function handleupdateposition($left,$top) 
-    {
+    {   
+        
         $picture_id = $this->getParameter('picture_id');
         $picture = $this->filmsData->pictureById($picture_id);
         $this->filmsData->updatePicture($picture_id,['pos_left'=>$left,
                                                      'pos_top'=>$top]);
-        $file_name = $picture_id.$picture['file_ext'];
+        $file_name = $picture_id.'resize'.$picture['file_ext'];
+        $filename_crop = 'croped'.$picture_id.$picture['file_ext'];
         $image_gd = imagecreatefromjpeg(__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$file_name);
-        $size = min(imagesx($image_gd), imagesy($image_gd));
-        $im2 = imagecrop($image_gd, ['x' => $left, 'y' => $top, 'width' => $size, 'height' => $size]);
+        $im2 = imagecrop($image_gd, ['x' => $left, 'y' => $top, 'width' => $picture['pos_with'], 'height' => $picture['pos_height']]);
         if ($im2 !== FALSE) {
-            bdump('jelo');
-            imagepng($im2, 'example-cropped.png');
+            imagepng($im2,__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$filename_crop);
             imagedestroy($im2);
         }
         imagedestroy($image_gd);
     }
+    
+    public function handleupdatesizecrop($width,$height) 
+    {   
+        bdump($height);
+        $picture_id = $this->getParameter('picture_id');
+        $picture = $this->filmsData->pictureById($picture_id);
+        $this->filmsData->updatePicture($picture_id,['pos_with'=>$width,
+                                                     'pos_height'=>$height]);
+        $file_name = $picture_id.'resize'.$picture['file_ext'];
+        $filename_crop = 'croped'.$picture_id.$picture['file_ext'];
+        $image_gd = imagecreatefromjpeg(__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$file_name);
+        $im2 = imagecrop($image_gd, ['x' => $picture['pos_left'], 'y' => $picture['pos_top'], 'width' => $width, 'height' => $height]);
+        if ($im2 !== FALSE) {
+            imagepng($im2,__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$filename_crop);
+            imagedestroy($im2);
+        }
+        imagedestroy($image_gd);
+       }
+       
+       
     
     protected function createComponentStoryBoard(): \StoryBoardComponent
     {

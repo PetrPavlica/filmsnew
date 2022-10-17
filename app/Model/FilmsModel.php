@@ -46,7 +46,7 @@ class FilmsModel extends BaseModel{
        foreach($positions as $position=>$id){
           if($id !== ''){
             $select = $this->database->table('storyboards_pictures')->where('id',$id)->fetch();
-            $select->update(['position'=>$position]);
+            $select->update(['position'=>$position+1]);
        
           }
         } 

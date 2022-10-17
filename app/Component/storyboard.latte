@@ -1,6 +1,7 @@
 {* Latte template *}
 
 {block content}
+
 {if $storyboard_id != 0}
 <h3 style='margin:10px;'>{$storyboard['name']}</h3>
 {/if}
@@ -12,34 +13,40 @@
          
   <li id="{$picture['id']}" class="ui-state-default">
    <form n:name="storyBoardForm" class='form style-form' id="storyboardform">   
-    <div class="card" style="width:350px;height:500px;">
-       <div class="row" style='margin-top:5px;'>
-                <div class="col-2">
+    <div class="card" style="width:350px;height:373px;margin-left:12px;">
+       <div class="row" style='margin-top:5px;width:100%;'>
+                <div style="position:relative; left:10px; top:3px; float:left; width:40px;">
                     <h4 class="card-title">{$picture['position']}</h4>  
                 </div>
-                <div class="col-3">
-                    <h4 class="card-title">TC: </h4>  
+               <div style="position:relative; float:left;top:3px; width:100px;">
+                    <h4 class="card-title">TC: {$all_tc_seconds_gm[$picture['id']] }</h4>  
                 </div> 
-                <div class="col-4">
-                     <h4 class="card-title"><label>Délka: </label><input type="number" n:name="minutes" onchange="updatetime();" id="minutes" style="width:60px;height:20px;"></h4> 
+                <div style="position:relative; float:left;top:3px; width:90px;">  
+                     <h4 class="card-title"><label>D: </label><input type="number" n:name="seconds" onchange="updatetime();" id="seconds" style="width:52px;height:20px;" min="0.1" step="0.1"></h4> 
                 </div>    
-                <div class="col-3" style='text-align:left;'>   
-                    <h4 class="card-title"><label> : </label><input type="number" n:name="seconds" onchange="updatetime();" id="seconds" style="width:62px;height:20px;"></h4> 
-                </div>
                 
+                <div style="position:relative; left:10px; float:left; width:110px;margin-bottom:10px;">
+                    <a href="{plink Films:picturechange,$picture['id'],$storyboard_id}"><button class="btn btn-primary" style="float:left;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .60rem;"><i class="fa fa-image"></i></button></a>    
+                    <a href="{plink storyBoard:edit!,$picture['id']}"><button n:name="send" class="btn btn-success active" style="float:left;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .60rem;"><i class="fa fa-pencil" ></i></button></a>
+                    <a href="{plink storyBoard:delete!,$picture['id']}"><button class="btn btn-primary" style="float:left;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .60rem;"><i class="fa fa-trash"></i></button></a>
+                </div>  
                 <input id="picture_id" type="hidden" n:name="picture_id">
                 <input id="storyboards_id" type="hidden" n:name="storyboards_id"  id="storyboards_id">
          </div>
             
              <div class="row" style='margin-top:5px;'>
-                 <div id="droppable" class="ui-widget-header">
+                 <div id="droppable" class="ui-widget-header" >
                     <input type="file" n:name="image" id="image" onchange="uploadimage();">
                  </div>
              </div>
    
         <div class="row" style='margin-top:5px;'>
-            <textarea n:name="text" id="voicetext" style="width:340px;height:300px;margin-left: 15px;font-size: 16px;"></textarea>
-        </div>    
+            
+            <textarea n:name="text" id="text" rows="3" style="width:340px;margin-left: 15px;font-size: 14px;"></textarea>
+        </div> 
+         <div class="row" style='margin-top:5px;'>
+            <textarea n:name="text_aboute" id="aboutetext" rows="4" style="width:340px;margin-left: 15px;font-size: 14px;"></textarea>
+        </div>         
       </div>  
     
     </form>
@@ -47,40 +54,48 @@
   </li>
 {else}     
    <li id="{$picture['id']}" class="ui-state-default">
-    <div class="card" style="width:350px;height:500px;">
-       <div class="row" style='margin-top:5px;'>
-                <div class="col-2">
+    <div class="card" style="width:350px;height:373px;margin-left:12px;">
+       <div class="row" style='margin-top:5px;width:100%;'>
+                <div style="position:relative; left:10px; top:3px; float:left; width:40px;">
                     <h4 class="card-title">{$picture['position']}</h4>  
                 </div>
-                <div class="col-5">
-                    <h4 class="card-title">TC: {if $all_tc_minutes[$picture['id']] < 10}0{/if}{$all_tc_minutes[$picture['id']]}:{if $all_tc_seconds[$picture['id']] < 10}0{/if}{$all_tc_seconds[$picture['id']]}</h4>  
+               <div style="position:relative; float:left;top:3px; width:100px;">
+                    <h4 class="card-title">TC: {$all_tc_seconds_gm[$picture['id']] }</h4>  
                 </div> 
-                <div class="col-5" style='text-align:left;'>   
-                    <h4 class="card-title">Délka: {if $picture['minutes'] < 10}0{/if}{$picture['minutes']}:{if $picture['seconds'] < 10}0{/if}{$picture['seconds']|number:1, ',', ' '}</h4> 
+                <div style="position:relative; float:left;top:3px; width:90px;">  
+                    <h4 class="card-title">D: {$all_seconds_gm[$picture['id']]}</h4> 
                 </div>
+                <div style="position:relative; left:10px; float:left; width:110px;margin-bottom:10px;">
+                    <a href="{plink Films:picturechange,$picture['id'],$storyboard_id}"><button class="btn btn-primary btn-primary" style="float:left;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .60rem;"><i class="fa fa-image"></i></button></a>    
+                    <a href="{plink storyBoard:edit!,$picture['id']}"><button class="btn btn-primary btn-primary" style="float:left;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .60rem;"><i class="fa fa-pencil" ></i></button></a>
+                    <a href="{plink storyBoard:delete!,$picture['id']}"><button class="btn btn-primary btn-primary" style="float:left;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .60rem;"><i class="fa fa-trash"></i></button></a>
+                </div>        
         </div>
             
              <div class="row">
                  {if $picture['picture'] != NULL}
                      
                   <div class="col-12 d-flex justify-content-center text-center">
-                     <img src="{$basePath}/{$picture['storyboards_id']}/{$picture['picture']}" style='max-width:350px;max-height:230px;'>
-                  </div>
+                     {if $picture['use_crop'] == 0} 
+                      <img src="{$basePath}/{$picture['storyboards_id']}/{$picture['picture']}" style='max-width:320px;max-height:230px;'>
+                     {else}
+                       <img src="{$basePath}/{$picture['storyboards_id']}/croped{$picture['picture']}" style='max-width:320px;max-height:230px;'>  
+                     {/if}     
+                 </div>
+                  
                   {else}
                   <div id="droppable">Přidejte obrázek</div>    
                  {/if} 
              </div>
-                 
-        <div class="card-body">
-            <p class="card-text">{$picture['text']}</p>
+       
+        <div class="row" style="height:60px;margin-top: 7px;">
+            <p class="card-text">{$picture['text']}test</p>
+        </div>
+        <div class="row">
+            <p class="card-text">{$picture['text_aboute']}</p>
         </div>
         <h4>{$all_message[$picture['id']]}</h4>
-        <div class="card-footer" style="height:50px;">
-        <a href="{plink Films:picturechange,$picture['id'],$storyboard_id}"><button class="btn btn-primary btn-sm" style="margin-bottom: 150px;"><i class="fa fa-image"></i></button></a>    
-        <a href="{plink storyBoard:edit!,$picture['id']}"><button class="btn btn-primary btn-sm" style="margin-bottom: 150px;"><i class="fa fa-pencil"></i></button></a>
-        <a href="{plink storyBoard:delete!,$picture['id']}"><button class="btn btn-danger btn-sm" style="margin-bottom: 150px;"><i class="fa fa-trash "></i></button></a>
-      </div>
-      </div>  
+        </div>  
 
   </li>
 {/if}
@@ -88,8 +103,8 @@
  {if $storyboard_id != 0}   
 <li class="ui-state-default">     
     <a href="{link newstoryboard!}">
-       <div class="card" style="width:350px;height:500px;">
-           <button class="btn btn-success mt-5 me-3">New</button>
+       <div class="card" style="width:350px;height:373px;margin-left:12px;">
+           <button class="btn btn-success mt-5 me-3" style="margin-left:17px;">New</button>
        </div>    
     </a>
 </li>        
