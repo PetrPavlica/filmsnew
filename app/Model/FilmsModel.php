@@ -42,6 +42,11 @@ class FilmsModel extends BaseModel{
         $select->delete();
     }
     
+    public function deleteStoryboard($id){
+        $select = $this->database->table('storyboards')->where('id',$id)->fetch();
+        $select->delete();
+    }
+    
     public function updatePositions($positions){
        foreach($positions as $position=>$id){
           if($id !== ''){

@@ -4,3 +4,4 @@ services:
 	- IStoryBoardComponent
 	- IStoryBoardFormComponent
 	- App\Model\FilmsModel
+	factory: Contributte\PdfResponse\PdfResponse

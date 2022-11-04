@@ -3,7 +3,19 @@
 {block content}
 
 {if $storyboard_id != 0}
-<h3 style='margin:10px;'>{$storyboard['name']}</h3>
+    <div class="row" style='margin:10px;width: 90%'>
+        <div class="col-4" style="width: 30%">
+             <h3 style='margin:10px;font-size:1.60rem;'>{$storyboard['name']} </h3>
+        </div>
+        <div class="col-4 text-center" style="width: 30%">
+             <h3 style='margin:10px;font-size:1.60rem;'>{$last_tc}</h3>
+         </div>   
+        <div class="col-4 text-end">
+            <a href="{plink storyBoard:pdf!,$storyboard_id}"><button class="btn btn-primary" style="margin-top: 12px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: 1rem;"><i class="fa fa-print" aria-hidden="true"></i></button></a>
+             <a href="{plink storyBoardForm:delete!,$storyboard_id}"><button class="btn btn-primary" style="margin-top: 12px;--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: 1rem;"><i class="fa fa-trash"></i></button></a>
+        </div>
+    </div>
+        
 {/if}
  <div class="row" style='margin:10px;'> 
 
@@ -40,27 +52,28 @@
                  </div>
              </div>
    
-        <div class="row" style='margin-top:5px;'>
-            
-            <textarea n:name="text" id="text" rows="3" style="width:340px;margin-left: 15px;font-size: 14px;"></textarea>
-        </div> 
+        
          <div class="row" style='margin-top:5px;'>
-            <textarea n:name="text_aboute" id="aboutetext" rows="4" style="width:340px;margin-left: 15px;font-size: 14px;"></textarea>
+            <textarea n:name="text_aboute" id="aboutetext" placeholder="Popisek:" rows="4" style="width:340px;margin-left: 15px;font-size: 14px;"></textarea>
         </div>         
-      </div>  
+         <div class="row" style='margin-top:5px;'>
+            
+            <textarea n:name="text" id="voicetext" placeholder="Voice text:" rows="3" style="width:340px;margin-left: 15px;font-size: 14px;"></textarea>
+        </div>        
+    </div>  
     
     </form>
          
   </li>
 {else}     
    <li id="{$picture['id']}" class="ui-state-default">
-    <div class="card" style="width:350px;height:373px;margin-left:12px;">
-       <div class="row" style='margin-top:5px;width:100%;'>
+    <div class="card" style="width:350px;height:430px;margin-left:12px;">
+       <div class="row" style='margin-top:5px;width:400px;'>
                 <div style="position:relative; left:10px; top:3px; float:left; width:40px;">
                     <h4 class="card-title">{$picture['position']}</h4>  
                 </div>
-               <div style="position:relative; float:left;top:3px; width:100px;">
-                    <h4 class="card-title">TC: {$all_tc_seconds_gm[$picture['id']] }</h4>  
+               <div style="position:relative; float:left;top:3px; width:110px;">
+                    <h4 class="card-title">TC: {$all_tc_seconds_gm[$picture['id']]}</h4>  
                 </div> 
                 <div style="position:relative; float:left;top:3px; width:90px;">  
                     <h4 class="card-title">D: {$all_seconds_gm[$picture['id']]}</h4> 
@@ -87,14 +100,14 @@
                   <div id="droppable">Přidejte obrázek</div>    
                  {/if} 
              </div>
-       
-        <div class="row" style="height:60px;margin-top: 7px;">
-            <p class="card-text">{$picture['text']}test</p>
-        </div>
-        <div class="row">
+        <div class="row" style="height:100px;margin-top: 7px;width:340px;">
             <p class="card-text">{$picture['text_aboute']}</p>
         </div>
-        <h4>{$all_message[$picture['id']]}</h4>
+        <div class="row" style="height:60px;margin-top: 7px; font-weight: bold;">
+            <p class="card-text">{$picture['text']}</p>
+        </div>
+        
+        <h4 style="margin-top:9px;">{$all_message[$picture['id']]}</h4>
         </div>  
 
   </li>

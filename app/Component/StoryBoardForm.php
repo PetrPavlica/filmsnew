@@ -13,6 +13,12 @@ final class StoryBoardFormComponent extends Nette\Application\UI\Control
         $this->filmsData = $filmsData;
     }
     
+    
+    public function handledelete($storyboard_id) {
+        $this->filmsData->deleteStoryboard($storyboard_id);
+        $this->presenter->redirect('Films:default');
+    }
+        
     public function createComponentStoryBoardForm(): Form
 
     {

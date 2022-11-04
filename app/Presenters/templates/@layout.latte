@@ -14,10 +14,10 @@
 <body>
         <style>
             #sortable { list-style-type: none; margin: 0; padding: 0; width: 90% }
-            #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 370px; height: 400px; font-size: 4em; text-align: center;background-color: transparent;border: 0px; }
+            #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 370px; height: 440px; font-size: 4em; text-align: center;background-color: transparent;border: 0px; }
             #droppable { width: 91%; height: 150px;background-color: white; margin-left: 15px;font-size: 12px;}
             h4 { font-size:0.22em; color:white;}
-            p { font-size:0.2em; color:white;}
+            p { font-size:0.2em; color:white; text-align: left; margin-left: 15px;}
         </style>
 	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
         

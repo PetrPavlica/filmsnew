@@ -17,16 +17,11 @@ final class PictureChangesComponent extends Nette\Application\UI\Control
         $this->picture_id = $picture_id;
         $this->storyboards_id = $storyboards_id;
     }
-     
     
-     public function render(): void
-    {   
-         $picture = $this->filmsData->pictureById($this->picture_id);
-         $this->template->picture_id = $this->picture_id;
-         $this->template->picture = $picture;
-         $this->template->storyboards_id = $this->storyboards_id;
-         $this->template->render(__DIR__ . '/picturechanges.latte');
-         
+    public function handleedit($picture_id,$storyboards_id){
+        $this->picture_id = $picture_id;
+        $this->storyboards_id = $storyboards_id;
+        bdump('jelo');
     }
 
         public function createComponentImageResizeForm(): Form
@@ -59,6 +54,16 @@ final class PictureChangesComponent extends Nette\Application\UI\Control
     {
         $data = $form->getValues(true);
         $this->onPictureChangesSave($data);
+    }
+    
+    public function render(): void
+    {   
+         $picture = $this->filmsData->pictureById($this->picture_id);
+         $this->template->picture_id = $this->picture_id;
+         $this->template->picture = $picture;
+         $this->template->storyboards_id = $this->storyboards_id;
+         $this->template->render(__DIR__ . '/picturechanges.latte');
+         
     }
 }
 

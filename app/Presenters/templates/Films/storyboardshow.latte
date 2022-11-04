@@ -1,0 +1,55 @@
+{* Latte template *}
+
+{block content}
+<style>
+            #sortable { list-style-type: none; margin: 0; padding: 0; width: 90% }
+            #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 370px; height: 440px; font-size: 4em; text-align: center;background-color: transparent;border: 0px; }
+            #droppable { width: 91%; height: 150px;background-color: white; margin-left: 15px;font-size: 12px;}
+            h4 { font-size:0.22em; color:black;}
+            p { font-size:0.2em; color:black; text-align: left; margin-left: 15px;}
+        </style>
+<ul id="sortable">
+  {foreach $all_pictures as $picture}
+<li id="{$picture['id']}" class="ui-state-default" >
+    <div  style="width:19%;margin-left:0.1%;border:solid 2px #000; ">
+       <div class="row" style='margin-top:5px;width:400px;margin-bottom: 5px;'>
+                <div style="float:left;width:35px;font-size: 16px;">
+                   {$picture['position']}  
+                </div>
+               <div style="float:left;width:140px;font-size: 16px;">
+                    TC: {$all_tc_seconds_gm[$picture['id']]}
+                </div> 
+                <div style="float:left;width:150px;font-size: 16px;text-align: right;">  
+                    Délka: {$all_seconds_gm[$picture['id']]}
+                </div>
+                 
+        </div>
+            
+             <div class="row">
+                 {if $picture['picture'] != NULL}
+                     
+                  <div class="col-12 d-flex justify-content-center text-center">
+                     {if $picture['use_crop'] == 0} 
+                      <img src="{$basePath}/{$picture['storyboards_id']}/{$picture['picture']}" style='max-width:320px;max-height:230px;'>
+                     {else}
+                       <img src="{$basePath}/{$picture['storyboards_id']}/croped{$picture['picture']}" style='max-width:320px;max-height:230px;'>  
+                     {/if}     
+                 </div>
+                  
+                  {else}
+                  <div id="droppable">Přidejte obrázek</div>    
+                 {/if} 
+             </div>
+        <div class="row" style="max-height:100px;margin-top: 7px;width:340px;">
+            <p class="card-text">{$picture['text_aboute']}</p>
+        </div>
+        <div class="row" style="max-height:60px;margin-top: 7px; font-weight: bold;">
+            <p class="card-text">{$picture['text']}</p>
+        </div>
+        
+        <h4 style="margin-top:9px;">{$all_message[$picture['id']]}</h4>
+        </div>  
+
+  </li>
+{/foreach}   
+</ul>

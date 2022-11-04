@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 use Nette;
-use Nette\Utils\Image;
+use Nette\Utils\FileSystem;
 
 final class FilmsPresenter extends Nette\Application\UI\Presenter
 {
@@ -19,6 +19,9 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
     /** @var \App\Model\FilmsModel @inject */
     public $filmsData;
     
+    public function beforeRender(){
+        $this->redrawControl('picturechange');
+    }
      public function handleuploadimage() 
     {  
        $files = $this->getHttpRequest()->getFiles();
@@ -29,13 +32,13 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
            $file_ext=strtolower(mb_substr($file->getSanitizedName(), strrpos($file->getSanitizedName(), ".")));
            $file_name = $picture_id.$file_ext;
            $file_name_r = $picture_id.'resize'.$file_ext;
-           $file->move(__DIR__ . '../../../www/'.'/'.$storyboards_id.'/'.$file_name);
-           $image_gd = imagecreatefromjpeg(__DIR__ . '../../../www/'.'/'.$storyboards_id.'/'.$file_name);
+           $file->move(__DIR__.'/../../www/'.$storyboards_id.'/'.$file_name);
+           $image_gd = imagecreatefromjpeg(__DIR__.'/../../www/'.$storyboards_id.'/'.$file_name);
            $ratio = 1024 / imagesx($image_gd);
            $height = imagesy($image_gd) * $ratio;
            $new_image = imagecreatetruecolor(1024, intval($height));
            imagecopyresampled($new_image, $image_gd, 0, 0, 0, 0, 1024, intval($height), imagesx($image_gd), imagesy($image_gd));
-           imagejpeg($new_image, __DIR__ . '../../../www/'.'/'.$storyboards_id.'/' . $file_name_r, 90);
+           imagejpeg($new_image, __DIR__.'/../../www/'.$storyboards_id.'/'.$file_name_r, 90);
            //$image_resize = imagescale ( $image_gd , 1024 , 768 );
            //$image_resize->save(__DIR__ . '../../../www/'.'/'.$storyboards_id.'/'.$file_name_r);
            $this->filmsData->updatePicture($picture_id, array('picture'=>$file_name,
@@ -63,13 +66,11 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
            $height = imagesy($image_gd) * $ratio;
            $new_image = imagecreatetruecolor(intval($width), intval($height));
            imagecopyresampled($new_image, $image_gd, 0, 0, 0, 0, 1024, intval($height), imagesx($image_gd), imagesy($image_gd));
-           imagejpeg($new_image, __DIR__ . '../../../www/'.'/'.$storyboards_id.'/' . $file_name_r, 90);
-           $this->filmsData->updatePicture($picture_id, array('picture'=>$file_name,
-                                                              'max_width'=>$width,  
+           imagejpeg($new_image, __DIR__.'/../../www/'.$storyboards_id.'/'.$file_name_r, 90);
+           $this->filmsData->updatePicture($picture_id, array('max_width'=>$width,  
                                                               'max_height'=>$height));
-           
-          $this->redirect('this');
-           
+  
+       $this->presenter->redirect('Films:pictureChange',$picture_id,$storyboards_id);    
     }
     
     public function handleupdatetime($seconds,$picture_id, $storyboards_id) 
@@ -89,7 +90,8 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
     }
     
     public function handleupdatetext($picture_id,$text) 
-    {    
+    {
+    bdump($text);    
     $this->filmsData->updatePicture($picture_id,['text'=>$text]);
     }
     
@@ -116,7 +118,7 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
                                                      'pos_top'=>$top]);
         $file_name = $picture_id.'resize'.$picture['file_ext'];
         $filename_crop = 'croped'.$picture_id.$picture['file_ext'];
-        $image_gd = imagecreatefromjpeg(__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$file_name);
+        $image_gd = imagecreatefromjpeg(__DIR__.'/../../www/'.$picture['storyboards_id'].'/'.$file_name);
         $im2 = imagecrop($image_gd, ['x' => $left, 'y' => $top, 'width' => $picture['pos_with'], 'height' => $picture['pos_height']]);
         if ($im2 !== FALSE) {
             imagepng($im2,__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$filename_crop);
@@ -134,10 +136,10 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
                                                      'pos_height'=>$height]);
         $file_name = $picture_id.'resize'.$picture['file_ext'];
         $filename_crop = 'croped'.$picture_id.$picture['file_ext'];
-        $image_gd = imagecreatefromjpeg(__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$file_name);
+        $image_gd = imagecreatefromjpeg(__DIR__.'/../../www/'.$picture['storyboards_id'].'/'.$file_name);
         $im2 = imagecrop($image_gd, ['x' => $picture['pos_left'], 'y' => $picture['pos_top'], 'width' => $width, 'height' => $height]);
         if ($im2 !== FALSE) {
-            imagepng($im2,__DIR__ . '../../../www/'.'/'.$picture['storyboards_id'].'/'.$filename_crop);
+            imagejpeg($im2,__DIR__.'/../../www/'.$picture['storyboards_id'].'/'.$filename_crop);
             imagedestroy($im2);
         }
         imagedestroy($image_gd);
@@ -175,5 +177,7 @@ final class FilmsPresenter extends Nette\Application\UI\Presenter
         $this->template->storyboard_id = $storyboard_id;
         $this->template->id = $picture_id;
     }
+    
+    
     
 }

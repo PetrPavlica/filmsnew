@@ -23,6 +23,9 @@
     <div class="row align-items-center justify-content-center">
         <input type="range" class="form-range" min="350" max="1024" step="1" id="rangepicture" style="width:1024px;" onchange="updatepicturesizewidth();">
     </div>
+    <div>
+        <a href="{plink Films:default,$picture['storyboards_id']}"><button class="btn btn-primary btn-sm" ><i class=" fa  fa-arrow-left"></i></button></a>
+    </div>    
 <div id="containment-wrapper" style="width:{$picture['max_width'] + 25}px;height:{$picture['max_height'] + 20}px;">
      <div id="draggable3" class="draggable ui-widget-content" style="background-color:transparent;border: 0px;">
          <div id="resizable" class="draggable ui-widget-content" style="background-color:transparent;">
@@ -34,4 +37,4 @@
 
            
 </div>    
-    
+  <img src="{$basePath}/{$picture['storyboards_id']}/croped{$picture['picture']}" style='max-width:320px;max-height:230px;margin:15px;'>   
